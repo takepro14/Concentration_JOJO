@@ -1,27 +1,44 @@
 <template>
-	<div id="app">
-		<Concentration />
-	</div>
+	<v-app>
+		<v-navigation-drawer app>
+			<!-- -->
+		</v-navigation-drawer>
+
+		<v-app-bar app>
+			<!-- -->
+		</v-app-bar>
+
+		<!-- アプリケーションのコンポーネントに基づいてコンテンツのサイズを決定 -->
+		<v-main>
+
+			<!-- アプリケーションに適切なgutterを提供 -->
+			<v-container fluid>
+
+			<!-- vue-routerを使用する場合 -->
+			<router-view></router-view>
+
+			<Concentration />
+
+			</v-container>
+		</v-main>
+		<v-footer app>
+			<!-- -->
+		</v-footer>
+	</v-app>
 </template>
 
 <script>
-import Concentration from './components/Concentration.vue'
+import Concentration from './components/Concentration';
 
 export default {
-	name: 'App',
-	components: {
-		Concentration
-	}
-}
-</script>
+  name: 'App',
 
-<style>
-#app {
-	font-family: Avenir, Helvetica, Arial, sans-serif;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	text-align: center;
-	color: #2c3e50;
-	margin-top: 60px;
-}
-</style>
+  components: {
+    Concentration,
+  },
+
+  data: () => ({
+    //
+  }),
+};
+</script>
