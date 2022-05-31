@@ -1,19 +1,31 @@
 <template>
-	<div>
-		<h1>Concentration</h1>
+	<v-container>
+		<h1>
+			JOJO's Bizzare Concentration
+		</h1>
 		<v-btn
 			elevation="2"
 			@click="gameStart"
 		>
-		ゲームを始める
+			ゲームを始めるゥゥ！！
 		</v-btn>
+
+		<ul>
+			<v-alert
+				v-show="getFlg"
+				border="bottom"
+				color="pink darken-1"
+				dark
+			>
+				<li>{{ card }} のカードだぞ</li>
+			</v-alert>
+		</ul>
 
 		<!--
 		トランプのレイアウト
 		-->
 		<v-row
-			class="blue lighten-4"
-			style="height: 450px;"
+			style="height: 450px"
 			justify="center"
 			align-content="center"
 		>
@@ -23,25 +35,29 @@
 				:key="item"
 			>
 				<v-card
-					class="d-flex pa-2"
-					elevation="6"
-					color="purple"
+					class="d-inline-flex pa-2"
+					elevation="2"
+					color="deep-purple lighten-3"
 					outlined
 					shaped
-					height=150
+					height=100
 					max-width="200"
-					@click="choiceCards(item.name)"
+					@click="choiceCards(item)"
 				>
 					<v-list-item three-line>
 						<v-img
+							aspect-ratio="2"
+							contain
 							height="50px"
 							width="100px"
 							src="../assets/JoJo's_Bizarre_Adventure_logo.png"
 						>
 						</v-img>
+						<!-- カードが見たい時用
 						<v-list-item-title>
-							{{ item.name }}
+							{{ item }}
 						</v-list-item-title>
+						-->
 					</v-list-item>
 				</v-card>
 			</v-col>
@@ -49,7 +65,9 @@
 		<v-card-title>
 			カードを選んでください。残り {{ cards_count }} 枚
 		</v-card-title>
-	</div>
+		card
+
+	</v-container>
 </template>
 
 <script>
@@ -57,48 +75,96 @@ export default {
 	name: 'Concentration-Game',
 	data: function() {
 		return {
-			items: [
-				{name: "ポルナレフ"},
-				{name: "ジョジョ"},
-				{name: "花京院典明"},
-				{name: "DIO"},
-				{name: "ポルナレフ"},
-				{name: "ジョジョ"},
-				{name: "花京院典明"},
-				{name: "DIO"},
-			],
+			items: [],
+			card: "",
 			cards: [],
 			cards_count: 2,
-		}
+			getFlg: false
+		};
+	},
+	mounted: function() {
+		this.gameStart();
 	},
 	methods: {
-		// カード選択
-		choiceCards: function(name) {
-			this.cards.push(name);
-			this.cards_count--;
-			// if (this.cards_count == 0) {
-			// 	alert("この2枚のカードで良いですか？")
-			// }
-			if (this.cards_count == 0) {
-				this.judge_card(this.cards);
-				this.set_flg();
-			}
-		},
-		// ゲーム開始
+		/*******************************************
+		ゲーム開始
+		*******************************************/
 		gameStart: function() {
-			alert("貴様・・みているな！！ゲーム開始！")
+			// alert("貴様・・みているな！！ゲーム開始！")
+			this.setData();
 		},
-		// カードが一致しているかジャッジする
-		judge_card: function(cards) {
-			if (cards[0] == cards[1]) {
-				alert("正解！")
-			} else {
-				alert("ブブー！")
+		/*******************************************
+		カード選択
+		*******************************************/
+		choiceCards: function(name) {
+			// カードを配列に追加する
+			this.cards.push(name);
+			// カードのnameを取得(画面表示用)
+			this.card = name;
+			// 表示フラグを切り替え(画面表示用)
+			this.getFlg = true;
+			// 引ける残りカード枚数を-1
+			this.cards_count--;
+			// 引ける残りカード枚数が0の場合、ジャッジへ
+			if (this.cards_count == 0) {
+				// カード2枚分のnameが入った配列を渡す
+				this.judgeCards(this.cards);
 			}
 		},
-		set_flg: function() {
-			this.cards_count = 2;
+		/*******************************************
+		カードのジャッジ
+		*******************************************/
+		judgeCards: function(cards) {
+			if (cards[0] == cards[1]) {
+				alert("正解！");
+				// カードを削除する
+				this.items.forEach((item, index) => {
+					if(item === cards[0]) {
+						this.items.splice(index, 1);
+					}
+				});
+			} else {
+				alert("ブブー！");
+			}
+		this.setFlg();
+		},
+		/*******************************************
+		カードの追加
+		*******************************************/
+		addCards: function() {
+			// 2枚ずつカードを追加する
+			for(let i = 0; i < 2; i++){
+				this.items.push(
+					"ポルナレフ", "ジョセフ", "JOJO", "キングクリムゾン", "スタープラチナ"
+				);
+			}
+		},
+		/*******************************************
+		カードのシャッフル
+		*******************************************/
+		shuffleCards: function(cards) {
+			// 要素数分の乱数を作成
+			const randomNumbers = [];
+			for (let i = 0; i < cards.length; i++) {
+				randomNumbers.push(Math.random());
+			}
+			const result = cards.sort((a, b) => {
+				return randomNumbers[cards.indexOf(a)] - randomNumbers[cards.indexOf(b)]
+			});
+			this.items = result;
+		},
+		/*******************************************
+		フラグの初期化
+		*******************************************/
+		setFlg: function() {
 			this.cards = [];
+			this.card = "";
+			this.cards_count = 2;
+			this.getFlg = false;
+		},
+		setData: function() {
+			this.addCards();
+			this.shuffleCards(this.items);
 		}
 	}
 
