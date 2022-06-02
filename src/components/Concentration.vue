@@ -1,25 +1,39 @@
 <template>
 	<v-container>
-		<h1>
-			JOJO's Bizzare Concentration
-		</h1>
-		<v-btn
-			elevation="2"
-			@click="gameStart"
-		>
-			ゲームを始めるゥゥ！！
-		</v-btn>
+		<v-row>
+			<h1>
+				JOJO's Bizzare Concentration
+			</h1>
 
-		<ul>
-			<v-alert
-				v-show="getFlg"
-				border="bottom"
-				color="pink darken-1"
-				dark
-			>
-				<li>{{ card }} のカードだぞ</li>
-			</v-alert>
-		</ul>
+			<v-col>
+				<ul>
+					<v-alert
+						v-show="getFlg"
+						border="bottom"
+						color="pink darken-1"
+						dark
+					>
+						<li>承太郎「おいジジイ、そりゃあ {{ card }} のカードだぞ」</li>
+					</v-alert>
+				</ul>
+			</v-col>
+
+		</v-row>
+		<v-row>
+			<v-col cols="2">
+				<v-btn
+					elevation="2"
+					@click="gameStart"
+				>
+					ゲームを始めるゥゥ！！
+				</v-btn>
+			</v-col>
+			<v-col>
+				<v-card-title>
+					カードを選んでください。残り {{ cards_count }} 枚
+				</v-card-title>
+			</v-col>
+		</v-row>
 
 		<!--
 		トランプのレイアウト
@@ -30,7 +44,7 @@
 			align-content="center"
 		>
 			<v-col
-				cols=3
+				cols="12" sm="6" md="4" lg="3"
 				v-for="item in items"
 				:key="item"
 			>
@@ -62,11 +76,6 @@
 				</v-card>
 			</v-col>
 		</v-row>
-		<v-card-title>
-			カードを選んでください。残り {{ cards_count }} 枚
-		</v-card-title>
-		card
-
 	</v-container>
 </template>
 
@@ -115,16 +124,18 @@ export default {
 		カードのジャッジ
 		*******************************************/
 		judgeCards: function(cards) {
+			// 一致の場合
 			if (cards[0] == cards[1]) {
-				alert("正解！");
+				alert("承太郎「やるじゃねぇか・・ジジイ」");
 				// カードを削除する
 				this.items.forEach((item, index) => {
 					if(item === cards[0]) {
 						this.items.splice(index, 1);
 					}
 				});
+			// 不一致の場合
 			} else {
-				alert("ブブー！");
+				alert("DIO「バカめ！そのカードは" + this.card + "なんじゃあないのか？」");
 			}
 		this.setFlg();
 		},
@@ -135,7 +146,14 @@ export default {
 			// 2枚ずつカードを追加する
 			for(let i = 0; i < 2; i++){
 				this.items.push(
-					"ポルナレフ", "ジョセフ", "JOJO", "キングクリムゾン", "スタープラチナ"
+					"ポルナレフ",
+					"ジョセフ",
+					"JOJO",
+					"キングクリムゾン",
+					"スタープラチナ",
+					// "スピードワゴン",
+					// "DIO",
+					// "空条承太郎"
 				);
 			}
 		},
