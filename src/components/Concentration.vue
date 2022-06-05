@@ -1,6 +1,6 @@
 <template>
 	<v-container>
-		<v-row>
+		<v-row style="height: 100px;">
 			<h1>
 				JOJO's Bizzare Concentration
 			</h1>
@@ -19,13 +19,13 @@
 			</v-col>
 
 		</v-row>
-		<v-row>
-			<v-col cols="2">
+		<v-row style="height: 100px;">
+			<v-col cols="3">
 				<v-btn
 					elevation="2"
 					@click="gameStart"
 				>
-					ゲームを始めるゥゥ！！
+					ゲームをリセット
 				</v-btn>
 			</v-col>
 			<v-col>
@@ -39,7 +39,7 @@
 		トランプのレイアウト
 		-->
 		<v-row
-			style="height: 450px"
+			style="height: 600px"
 			justify="center"
 			align-content="center"
 		>
@@ -100,6 +100,7 @@ export default {
 		*******************************************/
 		gameStart: function() {
 			// alert("貴様・・みているな！！ゲーム開始！")
+			this.setFlg();
 			this.setData();
 		},
 		/*******************************************
@@ -130,7 +131,7 @@ export default {
 				// カードを削除する
 				this.items.forEach((item, index) => {
 					if(item === cards[0]) {
-						this.items.splice(index, 1);
+						this.items.splice(index, 2);
 					}
 				});
 			// 不一致の場合
