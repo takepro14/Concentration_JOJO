@@ -18,7 +18,9 @@
 			<router-view></router-view>
 
 			<Concentration />
-
+			<!--
+			<GridDegign />
+			-->
 			</v-container>
 		</v-main>
 		<v-footer app>
@@ -29,16 +31,18 @@
 
 <script>
 import Concentration from './components/Concentration';
+// import GridDegign from './components/GridDegign';
 
 export default {
-  name: 'App',
+	name: 'App',
 
-  components: {
-    Concentration,
-  },
+	components: {
+		Concentration,
+		// GridDegign
+	},
 
-  data: () => ({
-    //
-  }),
+	data: () => ({
+		//
+	}),
 };
 </script>

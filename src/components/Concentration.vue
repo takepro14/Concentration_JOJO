@@ -1,31 +1,50 @@
 <template>
-	<v-container>
-		<v-row style="height: 100px;">
-			<h1>
-				JOJO's Bizzare Concentration
-			</h1>
-
+	<!--
+	全体を囲むコンテナ, 背景
+	-->
+	<v-container
+		class="bg"
+	>
+		<!--
+		タイトル
+		-->
+		<v-row>
+			<v-col>
+				<h1>
+					ジョジョの奇妙な神経衰弱
+				</h1>
+			</v-col>
+		</v-row>
+		<!--
+		カード選択時ダイアログ
+		-->
+		<v-row>
 			<v-col>
 				<ul>
-					<v-alert
-						v-show="getFlg"
-						border="bottom"
-						color="pink darken-1"
-						dark
-					>
-						<li>承太郎「おいジジイ、そりゃあ {{ card }} のカードだぞ」</li>
-					</v-alert>
+					<transition name="transit">
+						<v-alert
+							v-show="getFlg"
+							border="bottom"
+							color="pink darken-1"
+							dark
+						>
+							<li>承太郎「おいジジイ、そりゃあ {{ card }} のカードだぞ」</li>
+						</v-alert>
+					</transition>
 				</ul>
 			</v-col>
-
 		</v-row>
-		<v-row style="height: 100px;">
-			<v-col cols="3">
+		<!--
+		リセットボタン, カード選択枚数
+		-->
+		<v-row>
+			<v-col>
 				<v-btn
 					elevation="2"
 					@click="gameStart"
+					x-large
 				>
-					ゲームをリセット
+					ゲームをリセットォォ！
 				</v-btn>
 			</v-col>
 			<v-col>
@@ -36,15 +55,17 @@
 		</v-row>
 
 		<!--
-		トランプのレイアウト
+		カード一覧
 		-->
 		<v-row
-			style="height: 600px"
 			justify="center"
 			align-content="center"
 		>
+			<!--
+			カード
+			-->
 			<v-col
-				cols="12" sm="6" md="4" lg="3"
+				cols="6" sm="4" md="3" lg="2"
 				v-for="item in items"
 				:key="item"
 			>
@@ -67,11 +88,6 @@
 							src="../assets/JoJo's_Bizarre_Adventure_logo.png"
 						>
 						</v-img>
-						<!-- カードが見たい時用
-						<v-list-item-title>
-							{{ item }}
-						</v-list-item-title>
-						-->
 					</v-list-item>
 				</v-card>
 			</v-col>
@@ -192,6 +208,32 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.bg {
+	background-image: url("~@/assets/morioh-cho.jpg");
+	background-size: cover;
+	height: 1000px;
+}
+/* 背景画像設定のメモ */
+/* https://qiita.com/HaruPON/items/60cac14348dc70a050c7 */
+
+.flex-container {
+	display: flex;
+	justify-content: center;
+}
+
+/* 0.5秒かけて表示する */
+.transit-enter-active {
+	transition: opacity 0.5s;
+}
+/* opacity:0(透明)から */
+.transit-enter {
+	opacity: 0;
+}
+/* opacity:1(透明なし)にする */
+.transit-enter-to {
+	opacity: 1.0;
+}
+
 h3 {
 	margin: 40px 0 0;
 }
