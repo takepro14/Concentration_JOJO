@@ -61,6 +61,12 @@
 			justify="center"
 			align-content="center"
 		>
+
+		<v-dialog
+			v-model="dialog"
+			width="500"
+			>
+		<template v-slot:activator="{ on }">
 			<!--
 			カード
 			-->
@@ -68,6 +74,7 @@
 				cols="6" sm="4" md="3" lg="2"
 				v-for="item in items"
 				:key="item"
+				v-on="on"
 			>
 				<v-card
 					class="d-inline-flex pa-2"
@@ -91,6 +98,8 @@
 					</v-list-item>
 				</v-card>
 			</v-col>
+		</template>
+		</v-dialog>
 		</v-row>
 	</v-container>
 </template>
@@ -104,7 +113,8 @@ export default {
 			card: "",
 			cards: [],
 			cards_count: 2,
-			getFlg: false
+			getFlg: false,
+			dialog: false
 		};
 	},
 	mounted: function() {
@@ -123,6 +133,8 @@ export default {
 		カード選択
 		*******************************************/
 		choiceCards: function(name) {
+			// モーダルを表示
+			this.dialog = true
 			// カードを配列に追加する
 			this.cards.push(name);
 			// カードのnameを取得(画面表示用)
