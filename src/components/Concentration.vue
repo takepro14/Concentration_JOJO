@@ -61,45 +61,83 @@
 			justify="center"
 			align-content="center"
 		>
-
-		<v-dialog
-			v-model="dialog"
-			width="500"
-			>
-		<template v-slot:activator="{ on }">
-			<!--
-			カード
-			-->
-			<v-col
-				cols="6" sm="4" md="3" lg="2"
-				v-for="item in items"
-				:key="item"
-				v-on="on"
-			>
-				<v-card
-					class="d-inline-flex pa-2"
-					elevation="2"
-					color="deep-purple lighten-3"
-					outlined
-					shaped
-					height=100
-					max-width="200"
-					@click="choiceCards(item)"
+			<v-dialog
+				v-model="dialog"
+				width="500"
 				>
+				<!--
+				カード(裏面) ... アクティベータースロット
+				-->
+				<template v-slot:activator="{ on, attrs }">
+					<v-col
+						cols="6" sm="4" md="3" lg="2"
+						v-for="item in items"
+						:key="item"
+					>
+						<v-card
+							class="d-inline-flex pa-2"
+							elevation="2"
+							color="deep-purple lighten-3"
+							outlined
+							shaped
+							height=100
+							max-width="200"
+							v-on="on"
+							v-bind="attrs"
+						>
+						<!-- @click="choiceCards(item) "-->
+							<v-list-item three-line>
+								<v-img
+									aspect-ratio="2"
+									contain
+									height="50px"
+									width="100px"
+									src="../assets/JoJo's_Bizarre_Adventure_logo.png"
+								>
+								</v-img>
+							</v-list-item>
+						</v-card>
+					</v-col>
+				</template>
+
+				<!--
+				カード(表面) ... ダイアログコンテンツ
+				-->
+				<v-card>
+					<v-card-title
+						class="text-h5 grey lighten-2"
+					>
+						DIO
+					</v-card-title>
+
+					<v-card-text>
+						貧弱貧弱ゥ！！
+					</v-card-text>
+
 					<v-list-item three-line>
 						<v-img
 							aspect-ratio="2"
 							contain
-							height="50px"
-							width="100px"
-							src="../assets/JoJo's_Bizarre_Adventure_logo.png"
+							src="../assets/dio.jpg"
 						>
 						</v-img>
 					</v-list-item>
+
+
+					<v-divider></v-divider>
+
+					<v-card-actions>
+						<v-spacer></v-spacer>
+						<v-btn
+							color="primary"
+							text
+							@click="dialog = false"
+						>
+							閉じる
+						</v-btn>
+					</v-card-actions>
 				</v-card>
-			</v-col>
-		</template>
-		</v-dialog>
+			</v-dialog>
 		</v-row>
 	</v-container>
 </template>
@@ -133,8 +171,8 @@ export default {
 		カード選択
 		*******************************************/
 		choiceCards: function(name) {
-			// モーダルを表示
-			this.dialog = true
+			// モーダルを閉じる
+			// this.dialog = false
 			// カードを配列に追加する
 			this.cards.push(name);
 			// カードのnameを取得(画面表示用)
