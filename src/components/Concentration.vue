@@ -71,9 +71,10 @@
 				<template v-slot:activator="{ on, attrs }">
 					<v-col
 						cols="6" sm="4" md="3" lg="2"
-						v-for="item in items"
-						:key="item"
+						v-for="(value, key, index) in items"
+						:key="index"
 					>
+					{{ key }} is {{ value.name }}
 						<v-card
 							class="d-inline-flex pa-2"
 							elevation="2"
@@ -213,14 +214,9 @@ export default {
 			// 2枚ずつカードを追加する
 			for(let i = 0; i < 2; i++){
 				this.items.push(
-					"ポルナレフ",
-					"ジョセフ",
-					"JOJO",
-					"キングクリムゾン",
-					"スタープラチナ",
-					// "スピードワゴン",
-					// "DIO",
-					// "空条承太郎"
+					{name: "ポルナレフ", msg: "ポルナレフ〜"},
+					{name: "ジョジョ", msg: "ジジィ。。"},
+					{name: "DIO", msg: "貧弱貧弱"},
 				);
 			}
 		},
