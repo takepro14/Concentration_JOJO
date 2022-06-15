@@ -19,6 +19,7 @@
 
 			<Concentration />
 			<!--
+			<Vdialog />
 			<GridDegign />
 			-->
 			</v-container>
@@ -32,6 +33,7 @@
 <script>
 import Concentration from './components/Concentration';
 // import GridDegign from './components/GridDegign';
+// import Vdialog from './components/Vdialog.vue';
 
 export default {
 	name: 'App',
@@ -39,6 +41,7 @@ export default {
 	components: {
 		Concentration,
 		// GridDegign
+		// Vdialog
 	},
 
 	data: () => ({

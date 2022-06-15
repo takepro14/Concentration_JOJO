@@ -1,12 +1,12 @@
 <template>
 	<!--
-	全体を囲むコンテナ, 背景
+		全体を囲むコンテナ, 背景
 	-->
 	<v-container
 		class="bg"
 	>
 		<!--
-		タイトル
+			タイトル
 		-->
 		<v-row>
 			<v-col>
@@ -16,7 +16,7 @@
 			</v-col>
 		</v-row>
 		<!--
-		カード選択時ダイアログ
+			引いたカードを表示するダイアログ
 		-->
 		<v-row>
 			<v-col>
@@ -35,7 +35,7 @@
 			</v-col>
 		</v-row>
 		<!--
-		リセットボタン, カード選択枚数
+			ゲームリセットボタン, カード選択枚数
 		-->
 		<v-row>
 			<v-col>
@@ -55,38 +55,41 @@
 		</v-row>
 
 		<!--
-		カード一覧
+			カード一覧
 		-->
 		<v-row
 			justify="center"
 			align-content="center"
 		>
+			<!--
+				ダイアログブロック
+			-->
 			<v-dialog
 				v-model="dialog"
 				width="500"
-				>
+			>
 				<!--
-				カード(裏面) ... アクティベータースロット
+				カード(裏面)
 				-->
 				<template v-slot:activator="{ on, attrs }">
 					<v-col
 						cols="6" sm="4" md="3" lg="2"
-						v-for="(value, key, index) in items"
+						v-for="(card, index) in cards"
 						:key="index"
 					>
-					{{ key }} is {{ value.name }}
+					{{card.img}}
 						<v-card
 							class="d-inline-flex pa-2"
 							elevation="2"
 							color="deep-purple lighten-3"
 							outlined
 							shaped
-							height=100
+							height="100"
 							max-width="200"
 							v-on="on"
 							v-bind="attrs"
+							@click="getCard(card)"
 						>
-						<!-- @click="choiceCards(item) "-->
 							<v-list-item three-line>
 								<v-img
 									aspect-ratio="2"
@@ -102,28 +105,27 @@
 				</template>
 
 				<!--
-				カード(表面) ... ダイアログコンテンツ
+				カード(表面)
 				-->
 				<v-card>
 					<v-card-title
 						class="text-h5 grey lighten-2"
 					>
-						DIO
+						{{ card.name }}
 					</v-card-title>
 
 					<v-card-text>
-						貧弱貧弱ゥ！！
+						{{ card.msg }}
 					</v-card-text>
 
 					<v-list-item three-line>
 						<v-img
 							aspect-ratio="2"
 							contain
-							src="../assets/dio.jpg"
+							:src="card.src"
 						>
 						</v-img>
 					</v-list-item>
-
 
 					<v-divider></v-divider>
 
@@ -146,32 +148,36 @@
 <script>
 export default {
 	name: 'Concentration-Game',
-	data: function() {
+	data() {
 		return {
-			items: [],
+			// 引いたカードのオブジェクトを格納する
 			card: "",
+			// 全カードのオブジェクトを格納する
 			cards: [],
 			cards_count: 2,
 			getFlg: false,
-			dialog: false
+			dialog: false,
 		};
 	},
-	mounted: function() {
+	mounted() {
 		this.gameStart();
 	},
 	methods: {
 		/*******************************************
 		ゲーム開始
 		*******************************************/
-		gameStart: function() {
+		gameStart() {
 			// alert("貴様・・みているな！！ゲーム開始！")
 			this.setFlg();
 			this.setData();
 		},
+		getCard(item) {
+			this.card = item;
+		},
 		/*******************************************
 		カード選択
 		*******************************************/
-		choiceCards: function(name) {
+		choiceCards(name) {
 			// モーダルを閉じる
 			// this.dialog = false
 			// カードを配列に追加する
@@ -191,7 +197,7 @@ export default {
 		/*******************************************
 		カードのジャッジ
 		*******************************************/
-		judgeCards: function(cards) {
+		judgeCards(cards) {
 			// 一致の場合
 			if (cards[0] == cards[1]) {
 				alert("承太郎「やるじゃねぇか・・ジジイ」");
@@ -210,20 +216,37 @@ export default {
 		/*******************************************
 		カードの追加
 		*******************************************/
-		addCards: function() {
+		addCards() {
 			// 2枚ずつカードを追加する
 			for(let i = 0; i < 2; i++){
-				this.items.push(
-					{name: "ポルナレフ", msg: "ポルナレフ〜"},
-					{name: "ジョジョ", msg: "ジジィ。。"},
-					{name: "DIO", msg: "貧弱貧弱"},
+				this.cards.push(
+					{
+						name: "ポルナレフ",
+						msg: "あ・・・ありのまま今起こった事を話すぜ！",
+						src: require("../assets/pornalev.jpg")
+					},
+					{
+						name: "承太郎",
+						msg: "あまりなめた態度とるんじゃあねーぜ。おれはやると言ったらやる男だぜ・・！",
+						src: require("../assets/jotaro.jpg")
+					},
+					{
+						name: "DIO",
+						msg: "URYYYYYYYYYYYYYYY!!!!",
+						src: require("../assets/dio.jpg")
+					},
+					{
+						name: "ディアボロ",
+						msg: "この『キング・クリムゾン』の前では何者だろうとその「動き」は無意味となる！！",
+						src: require("../assets/king-crimson.jpg")
+					},
 				);
 			}
 		},
 		/*******************************************
 		カードのシャッフル
 		*******************************************/
-		shuffleCards: function(cards) {
+		shuffleCards(cards) {
 			// 要素数分の乱数を作成
 			const randomNumbers = [];
 			for (let i = 0; i < cards.length; i++) {
@@ -237,13 +260,13 @@ export default {
 		/*******************************************
 		フラグの初期化
 		*******************************************/
-		setFlg: function() {
+		setFlg() {
 			this.cards = [];
 			this.card = "";
 			this.cards_count = 2;
 			this.getFlg = false;
 		},
-		setData: function() {
+		setData() {
 			this.addCards();
 			this.shuffleCards(this.items);
 		}
