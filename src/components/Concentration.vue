@@ -16,25 +16,6 @@
 			</v-col>
 		</v-row>
 		<!--
-			引いたカードを表示するダイアログ
-		-->
-		<v-row>
-			<v-col>
-				<ul>
-					<transition name="transit">
-						<v-alert
-							v-show="getFlg"
-							border="bottom"
-							color="pink darken-1"
-							dark
-						>
-							<li>承太郎「おいジジイ、そりゃあ {{ card }} のカードだぞ」</li>
-						</v-alert>
-					</transition>
-				</ul>
-			</v-col>
-		</v-row>
-		<!--
 			ゲームリセットボタン, カード選択枚数
 		-->
 		<v-row>
@@ -49,7 +30,7 @@
 			</v-col>
 			<v-col>
 				<v-card-title>
-					カードを選んでください。残り {{ cards_count }} 枚
+					カードを選んでください。残り {{ cardsCount }} 枚
 				</v-card-title>
 			</v-col>
 		</v-row>
@@ -69,12 +50,12 @@
 				width="500"
 			>
 				<!--
-				カード(裏面)
+					カード(裏面)
 				-->
 				<template v-slot:activator="{ on, attrs }">
 					<v-col
 						cols="6" sm="4" md="3" lg="2"
-						v-for="(card, index) in cards"
+						v-for="(card, index) in cardsAll"
 						:key="index"
 					>
 					{{card.img}}
@@ -105,7 +86,7 @@
 				</template>
 
 				<!--
-				カード(表面)
+					カード(表面)
 				-->
 				<v-card>
 					<v-card-title
@@ -150,12 +131,16 @@ export default {
 	name: 'Concentration-Game',
 	data() {
 		return {
-			// 引いたカードのオブジェクトを格納する
+			// 引いたカードのオブジェクト
 			card: "",
-			// 全カードのオブジェクトを格納する
+			// 引いたカード(2枚)のオブジェクト
 			cards: [],
-			cards_count: 2,
-			getFlg: false,
+			// 全カードのコレクション
+			cardsAll: [],
+			// カードを引ける残数
+			cardsCount: 2,
+			// getFlg: false,
+			// モーダルの表示切り替え
 			dialog: false,
 		};
 	},
@@ -167,29 +152,22 @@ export default {
 		ゲーム開始
 		*******************************************/
 		gameStart() {
-			// alert("貴様・・みているな！！ゲーム開始！")
 			this.setFlg();
 			this.setData();
-		},
-		getCard(item) {
-			this.card = item;
 		},
 		/*******************************************
 		カード選択
 		*******************************************/
-		choiceCards(name) {
-			// モーダルを閉じる
-			// this.dialog = false
-			// カードを配列に追加する
-			this.cards.push(name);
-			// カードのnameを取得(画面表示用)
-			this.card = name;
-			// 表示フラグを切り替え(画面表示用)
-			this.getFlg = true;
+		// item: 引いたカード1枚 {...}
+		getCard(item) {
+			// 引いたカード(obj)を表示用の変数に代入する
+			this.card = item;
+			// 引いたカード(obj)を配列に追加する
+			this.cards.push(item);
 			// 引ける残りカード枚数を-1
-			this.cards_count--;
+			this.cardsCount--;
 			// 引ける残りカード枚数が0の場合、ジャッジへ
-			if (this.cards_count == 0) {
+			if (this.cardsCount == 0) {
 				// カード2枚分のnameが入った配列を渡す
 				this.judgeCards(this.cards);
 			}
@@ -197,20 +175,22 @@ export default {
 		/*******************************************
 		カードのジャッジ
 		*******************************************/
-		judgeCards(cards) {
+		// items: 引いたカードリスト [{...}, {...}]
+		judgeCards(items) {
 			// 一致の場合
-			if (cards[0] == cards[1]) {
+			if (items[0].name == items[1].name) {
 				alert("承太郎「やるじゃねぇか・・ジジイ」");
-				// カードを削除する
-				this.items.forEach((item, index) => {
-					if(item === cards[0]) {
-						this.items.splice(index, 2);
+				// カードを削除する: 全カードのnameを今カードのnameを順番に照合
+				this.cardsAll.forEach((item, index) => {
+					if(item.name === items[0].name) {
+						this.cardsAll.splice(index, 2);
 					}
 				});
 			// 不一致の場合
 			} else {
-				alert("DIO「バカめ！そのカードは" + this.card + "なんじゃあないのか？」");
+				alert("DIO「バカめ！そのカードは" + this.card.name + "なんじゃあないのか？」");
 			}
+		// フラグの初期化
 		this.setFlg();
 		},
 		/*******************************************
@@ -219,7 +199,7 @@ export default {
 		addCards() {
 			// 2枚ずつカードを追加する
 			for(let i = 0; i < 2; i++){
-				this.cards.push(
+				this.cardsAll.push(
 					{
 						name: "ポルナレフ",
 						msg: "あ・・・ありのまま今起こった事を話すぜ！",
@@ -246,14 +226,14 @@ export default {
 		/*******************************************
 		カードのシャッフル
 		*******************************************/
-		shuffleCards(cards) {
+		shuffleCards(items) {
 			// 要素数分の乱数を作成
 			const randomNumbers = [];
-			for (let i = 0; i < cards.length; i++) {
+			for (let i = 0; i < items.length; i++) {
 				randomNumbers.push(Math.random());
 			}
-			const result = cards.sort((a, b) => {
-				return randomNumbers[cards.indexOf(a)] - randomNumbers[cards.indexOf(b)]
+			const result = items.sort((a, b) => {
+				return randomNumbers[items.indexOf(a)] - randomNumbers[items.indexOf(b)]
 			});
 			this.items = result;
 		},
@@ -261,14 +241,15 @@ export default {
 		フラグの初期化
 		*******************************************/
 		setFlg() {
-			this.cards = [];
 			this.card = "";
-			this.cards_count = 2;
-			this.getFlg = false;
+			this.cards = [];
+			this.cardsCount = 2;
+			this.dialog = false;
 		},
 		setData() {
+			this.cardsAll = [];
 			this.addCards();
-			this.shuffleCards(this.items);
+			this.shuffleCards(this.cardsAll);
 		}
 	}
 
