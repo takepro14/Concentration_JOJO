@@ -37,15 +37,15 @@ import Concentration from './components/Concentration';
 
 export default {
 	name: 'App',
-
 	components: {
 		Concentration,
 		// GridDegign
 		// Vdialog
 	},
 
-	data: () => ({
-		//
-	}),
+	data() {
+		return {
+		}
+	},
 };
 </script>

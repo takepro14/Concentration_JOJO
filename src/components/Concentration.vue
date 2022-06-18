@@ -5,6 +5,7 @@
 	<v-container
 		class="bg"
 	>
+	カード一覧: {{ cardsAll }}
 		<!--
 			タイトル
 		-->
@@ -58,7 +59,7 @@
 						v-for="(card, index) in cardsAll"
 						:key="index"
 					>
-					{{card.img}}
+					{{card}}
 						<v-card
 							class="d-inline-flex pa-2"
 							elevation="2"
@@ -77,7 +78,7 @@
 									contain
 									height="50px"
 									width="100px"
-									src="../assets/JoJo's_Bizarre_Adventure_logo.png"
+									src="@/assets/JoJo's_Bizarre_Adventure_logo.png"
 								>
 								</v-img>
 							</v-list-item>
@@ -127,6 +128,8 @@
 </template>
 
 <script>
+import data from '../assets/data.json';
+
 export default {
 	name: 'Concentration-Game',
 	data() {
@@ -136,7 +139,7 @@ export default {
 			// 引いたカード(2枚)のオブジェクト
 			cards: [],
 			// 全カードのコレクション
-			cardsAll: [],
+			cardsAll: data,
 			// カードを引ける残数
 			cardsCount: 2,
 			// getFlg: false,
@@ -152,8 +155,13 @@ export default {
 		ゲーム開始
 		*******************************************/
 		gameStart() {
-			this.setFlg();
-			this.setData();
+			this.card = "";
+			this.cards = [];
+			this.cardsCount = 2;
+			this.dialog = false;
+			// this.cardsAll = [];
+			this.toPairCards();
+			this.shuffleCards(this.cardsAll);
 		},
 		/*******************************************
 		カード選択
@@ -194,34 +202,15 @@ export default {
 		this.setFlg();
 		},
 		/*******************************************
-		カードの追加
+		カードをペアで用意する
 		*******************************************/
-		addCards() {
+		toPairCards() {
 			// 2枚ずつカードを追加する
-			for(let i = 0; i < 2; i++){
-				this.cardsAll.push(
-					{
-						name: "ポルナレフ",
-						msg: "あ・・・ありのまま今起こった事を話すぜ！",
-						src: require("../assets/pornalev.jpg")
-					},
-					{
-						name: "承太郎",
-						msg: "あまりなめた態度とるんじゃあねーぜ。おれはやると言ったらやる男だぜ・・！",
-						src: require("../assets/jotaro.jpg")
-					},
-					{
-						name: "DIO",
-						msg: "URYYYYYYYYYYYYYYY!!!!",
-						src: require("../assets/dio.jpg")
-					},
-					{
-						name: "ディアボロ",
-						msg: "この『キング・クリムゾン』の前では何者だろうとその「動き」は無意味となる！！",
-						src: require("../assets/king-crimson.jpg")
-					},
-				);
-			}
+			// for(let i = 0; i < 2; i++){
+			// 	this.cardsAll.push(
+			// 		this.cardsAll
+			// 	);
+			// }
 		},
 		/*******************************************
 		カードのシャッフル
@@ -237,20 +226,6 @@ export default {
 			});
 			this.items = result;
 		},
-		/*******************************************
-		フラグの初期化
-		*******************************************/
-		setFlg() {
-			this.card = "";
-			this.cards = [];
-			this.cardsCount = 2;
-			this.dialog = false;
-		},
-		setData() {
-			this.cardsAll = [];
-			this.addCards();
-			this.shuffleCards(this.cardsAll);
-		}
 	}
 
 }
