@@ -5,7 +5,7 @@
 	<v-container
 		class="bg"
 	>
-	カード一覧: {{ cardsAll }}
+	{{ path }}
 		<!--
 			タイトル
 		-->
@@ -59,7 +59,6 @@
 						v-for="(card, index) in cardsAll"
 						:key="index"
 					>
-					{{card}}
 						<v-card
 							class="d-inline-flex pa-2"
 							elevation="2"
@@ -128,7 +127,6 @@
 </template>
 
 <script>
-import data from '../assets/data.json';
 
 export default {
 	name: 'Concentration-Game',
@@ -139,7 +137,7 @@ export default {
 			// 引いたカード(2枚)のオブジェクト
 			cards: [],
 			// 全カードのコレクション
-			cardsAll: data,
+			cardsAll: [],
 			// カードを引ける残数
 			cardsCount: 2,
 			// getFlg: false,
@@ -147,6 +145,7 @@ export default {
 			dialog: false,
 		};
 	},
+	// Vueインスタンスの生成→DOMへのマウントが完了した後に実行
 	mounted() {
 		this.gameStart();
 	},
@@ -154,14 +153,20 @@ export default {
 		/*******************************************
 		ゲーム開始
 		*******************************************/
+		// 手持ちカード, フラグの初期化
 		gameStart() {
+			this.setFlg();
+			this.toPairCards();
+			this.shuffleCards(this.cardsAll);
+		},
+		/*******************************************
+		フラグ初期化
+		*******************************************/
+		setFlg() {
 			this.card = "";
 			this.cards = [];
 			this.cardsCount = 2;
 			this.dialog = false;
-			// this.cardsAll = [];
-			this.toPairCards();
-			this.shuffleCards(this.cardsAll);
 		},
 		/*******************************************
 		カード選択
@@ -198,19 +203,43 @@ export default {
 			} else {
 				alert("DIO「バカめ！そのカードは" + this.card.name + "なんじゃあないのか？」");
 			}
-		// フラグの初期化
-		this.setFlg();
+			// フラグの初期化
+			this.setFlg();
 		},
 		/*******************************************
 		カードをペアで用意する
 		*******************************************/
 		toPairCards() {
 			// 2枚ずつカードを追加する
-			// for(let i = 0; i < 2; i++){
-			// 	this.cardsAll.push(
-			// 		this.cardsAll
-			// 	);
-			// }
+			for(let i = 0; i < 2; i++){
+				this.cardsAll.push(
+					{
+						"name": "ポルナレフ",
+						"msg": "あ・・・ありのまま今起こった事を話すぜ！",
+						"src": require("../assets/pornalev.jpg")
+					},
+					{
+						"name": "承太郎",
+						"msg": "あまりなめた態度とるんじゃあねーぜ。おれはやると言ったらやる男だぜ・・！",
+						"src": require("../assets/jotaro.jpg")
+					},
+					{
+						"name": "DIO",
+						"msg": "URYYYYYYYYYYYYYYY!!!!",
+						"src": require("../assets/DIO.jpg")
+					},
+					{
+						"name": "ディアボロ",
+						"msg": "この『キング・クリムゾン』の前では何者だろうとその「動き」は無意味となる！！",
+						"src": require("../assets/king-crimson.jpg")
+					},
+					{
+						"name": "ジョルノ・ジョバァーナ",
+						"msg": "このジョルノ・ジョバァーナには夢がある！",
+						"src": require("../assets/jorno.jpg")
+					},
+				);
+			}
 		},
 		/*******************************************
 		カードのシャッフル
