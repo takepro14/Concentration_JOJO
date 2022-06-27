@@ -35,7 +35,6 @@
 				</v-card-title>
 			</v-col>
 		</v-row>
-
 		<!--
 			カード一覧
 		-->
@@ -115,7 +114,7 @@
 						<v-btn
 							color="primary"
 							text
-							@click="dialog = false"
+							@click="dialog = false; judgeCards();"
 						>
 							閉じる
 						</v-btn>
@@ -179,32 +178,29 @@ export default {
 			this.cards.push(item);
 			// 引ける残りカード枚数を-1
 			this.cardsCount--;
-			// 引ける残りカード枚数が0の場合、ジャッジへ
-			if (this.cardsCount == 0) {
-				// カード2枚分のnameが入った配列を渡す
-				this.judgeCards(this.cards);
-			}
 		},
 		/*******************************************
 		カードのジャッジ
 		*******************************************/
-		// items: 引いたカードリスト [{...}, {...}]
-		judgeCards(items) {
-			// 一致の場合
-			if (items[0].name == items[1].name) {
-				alert("承太郎「やるじゃねぇか・・ジジイ」");
-				// カードを削除する: 全カードのnameを今カードのnameを順番に照合
-				this.cardsAll.forEach((item, index) => {
-					if(item.name === items[0].name) {
-						this.cardsAll.splice(index, 2);
-					}
-				});
-			// 不一致の場合
-			} else {
-				alert("DIO「バカめ！そのカードは" + this.card.name + "なんじゃあないのか？」");
+		judgeCards() {
+			// 引ける残りカード枚数が0の場合、ジャッジへ
+			if (this.cardsCount == 0) {
+				// 一致の場合
+				if (this.cards[0].name == this.cards[1].name) {
+					alert("承太郎「やるじゃねぇか・・ジジイ」");
+					// カードを削除する: 全カードのnameを今カードのnameを順番に照合
+					this.cardsAll.forEach((item, index) => {
+						if(item.name === this.cards[0].name) {
+							this.cardsAll.splice(index, 2);
+						}
+					});
+				// 不一致の場合
+				} else {
+					alert("DIO「バカめ！そのカードは" + this.card.name + "なんじゃあないのか？」");
+				}
+				// フラグの初期化
+				this.setFlg();
 			}
-			// フラグの初期化
-			this.setFlg();
 		},
 		/*******************************************
 		カードをペアで用意する

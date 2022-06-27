@@ -1,24 +1,5 @@
-# concentration
+# Vueでジョジョの神経衰弱
 
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- Vue.js, Vuetifyを使った神経衰弱ゲーム
+- 学習用のサンプルアプリケーション
+- 題材はジョジョの奇妙な冒険
